@@ -10,6 +10,7 @@ import com.ventas.eCommerce.entities.Product;
 import com.ventas.eCommerce.enums.Category;
 import com.ventas.eCommerce.exceptions.MyException;
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class ProductController {
     }
 
     @PostMapping("/registed")
-    public String registro_producto(@RequestParam(required = false)  String name, String description, Image image, String brand, MultipartFile file, Double price, String category, Boolean creationDeletion, Integer stock, ModelMap model) {
+    public String registro_producto(@RequestParam(required = false)  String name, String description, Image image, String brand, MultipartFile file, java.math.BigDecimal price, String category, Boolean creationDeletion, Integer stock, ModelMap model) {
         try {
             Category categoryEnum = Category.valueOf(category);
             productService.Register(name, description, file, brand, price, categoryEnum, creationDeletion, stock);

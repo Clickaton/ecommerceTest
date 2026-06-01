@@ -12,6 +12,7 @@ import com.ventas.eCommerce.repositories.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 import javax.transaction.Transactional;
 import javax.xml.bind.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class ProductService {
     private ImageService imageService;
 
     @Transactional
-    public void Register(String name, String description, MultipartFile file, String brand, Double price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
+    public void Register(String name, String description, MultipartFile file, String brand, java.math.BigDecimal price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
         validar(name, description, file, brand, price, category, creationDeletion, stock);
         Product product = new Product();
 
@@ -49,7 +50,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public void modificar(Integer id, String name, String description, MultipartFile file, String brand, Double price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
+    public void modificar(Integer id, String name, String description, MultipartFile file, String brand, java.math.BigDecimal price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
 
         Optional<Product> respuesta = productRepository.findById(id);
 
@@ -76,7 +77,7 @@ public class ProductService {
 
     }
 
-    public void sale(Integer id, String name, String description, MultipartFile file, String brand, Double price, Category category, Boolean creationDeletion, Integer stock){
+    public void sale(Integer id, String name, String description, MultipartFile file, String brand, java.math.BigDecimal price, Category category, Boolean creationDeletion, Integer stock){
         Optional<Product> respuesta = productRepository.findById(id);
         if (respuesta.isPresent()){
             Product product = new Product();
@@ -102,7 +103,7 @@ public class ProductService {
         return productRepository.getOne(id);
     }
 
-    public void validar(String name, String description, MultipartFile file, String brand, Double price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
+    public void validar(String name, String description, MultipartFile file, String brand, java.math.BigDecimal price, Category category, Boolean creationDeletion, Integer stock) throws MyException {
 
         if (name == null || name.isEmpty()) {
             throw new MyException("El nombre del producto no puede ser nulo o estar vacío.");

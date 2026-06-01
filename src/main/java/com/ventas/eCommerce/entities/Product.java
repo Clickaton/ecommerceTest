@@ -38,7 +38,7 @@ public class Product {
     @OneToOne
     private Image image;
     private String brand;
-    private Double price;
+    private java.math.BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Category category;
     private Boolean creationDeletion;

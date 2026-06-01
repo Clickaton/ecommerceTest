@@ -27,6 +27,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Getter
 @Setter
+@javax.persistence.Table(name = "transactions")
 public class Transaction {
 
    @Id
@@ -38,6 +39,6 @@ public class Transaction {
     private LocalDate expirationDate;
     @OneToOne
     private Cart cart;
-    private String addres;
+    private String address;
 
 }
