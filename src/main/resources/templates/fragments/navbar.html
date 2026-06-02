@@ -9,14 +9,14 @@
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
                     <li><a href="/product/catalogue" class="nav-link px-2 text-white">Catálogo</a></li>
-                    <li><a href="/pricing" class="nav-link px-2 text-white">Pricing</a></li>
-                    <li><a href="/faqs" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a th:if="${session.usuariosession != null and #strings.equals(#strings.trim(session.usuariosession.rol), 'ADMIN')}" href="/admin/dashboard" class="nav-link px-2 text-white">Panel Administrativo</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li><a sec:authorize="hasAuthority('ROLE_ADMIN')" href="/admin/dashboard" class="nav-link px-2 text-white">Panel Administrativo</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" th:action="@{/product/catalogue}" method="get">
                     <input type="search" class="form-control text-bg-light form-control-dark text-bg-primary"
-                        placeholder="Search..." aria-label="Search">
+                        placeholder="Search..." aria-label="Search" name="query">
                 </form>
 
                 <div class="text-end">
@@ -25,7 +25,7 @@
                     <a type="button" th:if="${session.usuariosession == null}" href="/user/register"
                         class="btn btn-outline-light me-2">Registrarse</a>
                     <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}" href="/user/profile/__${session.usuariosession.id}__"
+                        <a class="nav-link dropdown-toggle" th:if="${session.usuariosession != null}" href="#"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Perfil <img href=" /registrar" th:src="@{/image/perfil/__${session.usuariosession.id}__}"
                                 alt="user-image" class="img-limitada">
@@ -35,7 +35,7 @@
                                 <a class="dropdown-item" th:href="@{/logout}">Cerrar sesión</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" th:if="${session.usuariosession != null}" th:href="@{/user/profile/edit/__${session.usuariosession.id}__}">Editar perfil</a>
+                                <a class="dropdown-item" th:href="@{/perfil}">Editar perfil</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" th:if="${session.usuariosession != null}"

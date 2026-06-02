@@ -110,32 +110,35 @@ public class UserService implements UserDetailsService {
 
     public void validar(String name, String lastName, String email, String password, String password2, String phone, Rol rol) throws MyException {
 
+        if (email == null || email.trim().isEmpty()) {
+            throw new MyException("El email no puede ser nulo o estar vacío");
+        }
+        if (!email.contains(".") || !email.contains("@")) {
+            throw new MyException("El email es incorrecto, por favor verificarlo");
+        }
+
         User usuarioExistente = userRepository.findByEmail(email);
         if (usuarioExistente != null) {
             throw new MyException("Ya existe un usuario registrado con ese email");
+        }
+
+        if (phone == null || phone.trim().isEmpty() || phone.length() < 10) {
+            throw new MyException("El Telefono no puede estar vacio y debe tener 10 numeros incluyendo el codigo de area");
         }
 
         User usuarioExistente2 = userRepository.findByPhone(phone);
         if (usuarioExistente2 != null) {
             throw new MyException("Ya existe un usuario con ese número de teléfono");
         }
-        if (name.isEmpty() || name == null) {
+
+        if (name == null || name.trim().isEmpty()) {
             throw new MyException("El Nombre no puede ser nulo o estar vacio");
         }
-        if (lastName == null) {
+        if (lastName == null || lastName.trim().isEmpty()) {
             throw new MyException("El Apellido no puede ser nulo o estar vacio");
-        } else {
         }
-        if (email.isEmpty() || email == null) {
-            throw new MyException("El email es no puede ser nulo o estar vacio");
-        }
-        if (!email.contains(".") || !email.contains("@")) {
-            throw new MyException("El email es incorrecto, por favor verificarlo");
-        }
-        if (phone.isEmpty() || phone == null || phone.length() < 10) {
-            throw new MyException("El Telefono no puede estar vacio y debe tener 10 numeros incluyendo el codigo de area");
-        }
-        if (password.isEmpty() || password == null || password.length() <= 5) {
+
+        if (password == null || password.trim().isEmpty() || password.length() <= 5) {
             throw new MyException("La Contraseña no puede estar vacia y debe tener mas de 5 digitos");
         }
         if (!password.equals(password2)) {

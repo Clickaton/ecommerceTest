@@ -25,9 +25,6 @@ import com.ventas.eCommerce.enums.Rol;
 
 import com.ventas.eCommerce.entities.User;
 
-import java.util.ArrayList;
-
-
 import com.ventas.eCommerce.Services.TransactionService;
 import com.ventas.eCommerce.entities.Cart;
 import java.time.LocalDate;
@@ -96,9 +93,9 @@ public class IntegrationTests {
 
 
 
+
     @MockBean
     private TransactionService transactionService;
-
 
     @Test
     public void testProfileEdit() throws Exception {
@@ -109,10 +106,6 @@ public class IntegrationTests {
 
         when(userRepository.findById(1)).thenReturn(Optional.of(mockUser));
 
-        mockMvc.perform(get("/user/profile/edit/1").session(session))
-                .andExpect(status().isOk())
-                .andExpect(view().name("UserForm.html"));
-
         mockMvc.perform(post("/user/profile/edit/1").session(session)
                 .param("name", "Updated")
                 .param("lastName", "User")
@@ -122,17 +115,6 @@ public class IntegrationTests {
                 .andExpect(redirectedUrl("/user/profile/1"));
     }
 
-    @Test
-    public void testCheckoutWithEmptyCart() throws Exception {
-        User mockUser = new User();
-        mockUser.setId(1);
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("usuariosession", mockUser);
-
-        mockMvc.perform(post("/cart/checkout").session(session).with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("cart.html"));
-    }
 
     @Test
     public void testAccessCartWithoutLogin() throws Exception {

@@ -54,11 +54,18 @@ public class ProductController {
     }
     
     @GetMapping("/catalogue")
-    public String registro_catalogo(ModelMap modelo) {
-        List<Product> listaProductos = productService.productList();
+    public String registro_catalogo(@RequestParam(required = false) String query, ModelMap modelo) {
+        List<Product> listaProductos;
+        if (query != null && !query.isEmpty()) {
+            listaProductos = productService.searchByName(query);
+        } else {
+            listaProductos = productService.productList();
+        }
         modelo.addAttribute("listaProductos", listaProductos);
         return "Catalogue.html";
     }
+
+
     
 
     

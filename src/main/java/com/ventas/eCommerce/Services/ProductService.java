@@ -90,6 +90,10 @@ public class ProductService {
 
     }
 
+    public List<Product> searchByName(String query) {
+        return productRepository.findByNameContainingIgnoreCase(query);
+    }
+
     public List<Product> productList() {
 
         List<Product> products = new ArrayList();
