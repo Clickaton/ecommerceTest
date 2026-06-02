@@ -9,6 +9,11 @@ import com.ventas.eCommerce.entities.Cart;
 import com.ventas.eCommerce.entities.Product;
 import com.ventas.eCommerce.entities.User;
 import javax.servlet.http.HttpSession;
+
+import com.ventas.eCommerce.Services.TransactionService;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.math.BigDecimal;
+
+
 /**
  *
  * @author chris
@@ -29,6 +37,40 @@ import java.util.List;
 @Controller
 @RequestMapping("/cart")
 public class CartController {
+
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @PostMapping("/checkout")
+    public String checkout(HttpSession session, ModelMap model) {
+        try {
+            User logueado = (User) session.getAttribute("usuariosession");
+            if (logueado == null) {
+                return "redirect:/user/login";
+            }
+            Cart cart = logueado.getCart();
+            if (cart == null || cart.getProducts() == null || cart.getProducts().isEmpty()) {
+                model.put("error", "El carrito está vacío.");
+                return "cart.html";
+            }
+
+            BigDecimal totalAmount = BigDecimal.ZERO;
+            for (Product p : cart.getProducts()) {
+                if(p.getPrice() != null) {
+                    totalAmount = totalAmount.add(p.getPrice());
+                }
+            }
+
+            transactionService.register(LocalDateTime.now(), "00000000", "0000-0000-0000-0000", LocalDate.now().plusYears(1), cart, "Direccion registrada", logueado, totalAmount.doubleValue());
+            // Clear cart logic could go here
+            model.put("exito", "Compra realizada exitosamente.");
+            return "inicio.html";
+        } catch (Exception e) {
+            model.put("error", "Error procesando la compra: " + e.getMessage());
+            return "cart.html";
+        }
+    }
 
     @Autowired
     private CartService cartService;

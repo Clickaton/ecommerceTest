@@ -4,6 +4,10 @@ import com.ventas.eCommerce.Services.ProductService;
 import com.ventas.eCommerce.Services.UserService;
 import com.ventas.eCommerce.entities.Product;
 import com.ventas.eCommerce.entities.User;
+
+import com.ventas.eCommerce.entities.Transaction;
+import com.ventas.eCommerce.repositories.TransactionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +27,18 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @GetMapping("/transactions")
+    public String transactions(ModelMap model) {
+        List<Transaction> transactions = transactionRepository.findAll();
+        model.addAttribute("transactions", transactions);
+        return "dashboard.html";
+    }
+
 
     @GetMapping("/dashboard")
     public String dashboard() {

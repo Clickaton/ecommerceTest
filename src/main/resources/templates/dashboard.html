@@ -32,7 +32,7 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">
+                    <a href="/" class="nav-link active" aria-current="page">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#home" />
                         </svg>
@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link link-body-emphasis">
+                    <a href="/admin/dashboard" class="nav-link link-body-emphasis">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#speedometer2" />
                         </svg>
@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link link-body-emphasis">
+                    <a th:href="@{/user/profile/__${session.usuariosession.id}__}" class="nav-link link-body-emphasis">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#speedometer2" />
                         </svg>
@@ -56,7 +56,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link link-body-emphasis">
+                    <a href="/product/register" class="nav-link link-body-emphasis">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#speedometer2" />
                         </svg>
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link link-body-emphasis">
+                    <a href="/user/register" class="nav-link link-body-emphasis">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#speedometer2" />
                         </svg>
@@ -88,7 +88,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link link-body-emphasis">
+                    <a href="/admin/transactions" class="nav-link link-body-emphasis">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -127,9 +127,9 @@
                         las herramientas que necesitas para una experiencia excepcional!
                     </p>
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <a href="#"> <button type="button"
+                        <a href="/admin/products"> <button type="button"
                                 class="btn btn-primary btn-lg px-4 gap-3">Productos</button></a>
-                        <a href="#"><button type="button"
+                        <a href="/admin/users"><button type="button"
                                 class="btn btn-success btn-lg px-4">Usuarios</button></a>
                     </div>
                 </div>

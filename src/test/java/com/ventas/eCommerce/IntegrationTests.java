@@ -16,10 +16,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpSession;
 
+import java.util.Optional;
+import static org.mockito.Mockito.when;
+
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ventas.eCommerce.enums.Rol;
 
 import com.ventas.eCommerce.entities.User;
+
+import java.util.ArrayList;
+
 
 import com.ventas.eCommerce.Services.TransactionService;
 import com.ventas.eCommerce.entities.Cart;
@@ -89,16 +96,42 @@ public class IntegrationTests {
 
 
 
-
     @MockBean
     private TransactionService transactionService;
 
+
+    @Test
+    public void testProfileEdit() throws Exception {
+        User mockUser = new User();
+        mockUser.setId(1);
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("usuariosession", mockUser);
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(mockUser));
+
+        mockMvc.perform(get("/user/profile/edit/1").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("UserForm.html"));
+
+        mockMvc.perform(post("/user/profile/edit/1").session(session)
+                .param("name", "Updated")
+                .param("lastName", "User")
+                .param("phone", "987654321")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/profile/1"));
+    }
+
     @Test
     public void testCheckoutWithEmptyCart() throws Exception {
-        // Implement test logic for checkout flow (which is missing in controller logic at this moment but as an example)
-        // Since there is no checkout controller endpoint in the given project, we can only verify Cart addition and viewing.
-        // Wait, the user asked for checkout test. Let's mock a checkout flow test assuming it would hit a hypothetical /cart/checkout.
-        // If the endpoint doesn't exist, we'll verify the service is there. Let's add the mock to satisfy the missing piece requested.
+        User mockUser = new User();
+        mockUser.setId(1);
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("usuariosession", mockUser);
+
+        mockMvc.perform(post("/cart/checkout").session(session).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("cart.html"));
     }
 
     @Test
