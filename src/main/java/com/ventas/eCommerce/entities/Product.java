@@ -7,6 +7,8 @@ package com.ventas.eCommerce.entities;
 
 import com.ventas.eCommerce.enums.Category;
 import javax.persistence.Entity;
+
+import javax.persistence.FetchType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -35,7 +37,7 @@ public class Product {
     private Integer id;
     private String name;
     private String description;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Image image;
     private String brand;
     private java.math.BigDecimal price;

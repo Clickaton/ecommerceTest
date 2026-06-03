@@ -47,6 +47,7 @@ public class TransactionService {
         transaction.setCardNumber(cardNumber);
         transaction.setExpirationDate(expirationDate);
         transaction.setCart(cart);
+        transaction.setUser(user);
         
         transactionRepository.save(transaction);
 

@@ -44,7 +44,12 @@ public class AdminController {
 
     @PostMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable Integer id, ModelMap model) {
-        productRepository.deleteById(id);
+        Optional<Product> p = productRepository.findById(id);
+        if (p.isPresent()) {
+            Product prod = p.get();
+            prod.setCreationDeletion(false);
+            productRepository.save(prod);
+        }
         return "redirect:/admin/products";
     }
 
