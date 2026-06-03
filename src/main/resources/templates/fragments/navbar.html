@@ -11,12 +11,12 @@
                     <li><a href="/product/catalogue" class="nav-link px-2 text-white">Catálogo</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-                    <li><a th:if="${session.usuariosession != null and #authorization.expression('hasRole(''ADMIN'')')}" href="/admin/dashboard" class="nav-link px-2 text-white">Panel Administrativo</a></li>
+                    <li><a sec:authorize="hasAuthority('ROLE_ADMIN')" href="/admin/dashboard" class="nav-link px-2 text-white">Panel Administrativo</a></li>
                 </ul>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" th:action="@{/product/catalogue}" method="get">
                     <input type="search" class="form-control text-bg-light form-control-dark text-bg-primary"
-                        placeholder="Search..." aria-label="Search">
+                        placeholder="Search..." aria-label="Search" name="query">
                 </form>
 
                 <div class="text-end">

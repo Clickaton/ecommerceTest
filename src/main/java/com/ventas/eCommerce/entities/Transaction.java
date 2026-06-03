@@ -11,6 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +32,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Getter
 @Setter
+@javax.persistence.Table(name = "transactions")
 public class Transaction {
 
    @Id
@@ -36,8 +42,12 @@ public class Transaction {
     private String dni;
     private String cardNumber;
     private LocalDate expirationDate;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Cart cart;
-    private String addres;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String address;
 
 }

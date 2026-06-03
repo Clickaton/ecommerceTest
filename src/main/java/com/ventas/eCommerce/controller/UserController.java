@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Optional;
+import com.ventas.eCommerce.repositories.UserRepository;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -41,9 +46,56 @@ public class UserController {
      @Autowired
     private CartService cartService;
 
-    @GetMapping("/register")
-    public String register() {
+    @Autowired
+    private UserRepository userRepository;
 
+    @GetMapping("/profile/edit/{id}")
+    public String editProfile(@PathVariable Integer id, HttpSession session, ModelMap model) {
+        User logueado = (User) session.getAttribute("usuariosession");
+        if (logueado == null || !logueado.getId().equals(id)) {
+            return "redirect:/user/login";
+        }
+        model.put("user", logueado);
+        return "ProfileEdit.html";
+    }
+
+    @PostMapping("/profile/edit/{id}")
+    public String updateProfile(@PathVariable Integer id, @RequestParam(required = false) String name, @RequestParam(required = false) String lastName, String phone, HttpSession session, ModelMap model) {
+        try {
+            User logueado = (User) session.getAttribute("usuariosession");
+            if (logueado == null || !logueado.getId().equals(id)) {
+                return "redirect:/user/login";
+            }
+
+            // Validate and update User
+            Optional<User> optionalUser = userRepository.findById(id);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                if(name != null && !name.isEmpty()) user.setName(name);
+                if(lastName != null && !lastName.isEmpty()) user.setLastName(lastName);
+                if(phone != null && !phone.isEmpty()) user.setPhone(phone);
+
+                userRepository.save(user);
+
+                // Update session
+                session.setAttribute("usuariosession", user);
+
+                model.put("exito", "Perfil actualizado correctamente.");
+                return "redirect:/user/profile/" + id;
+            } else {
+                model.put("error", "Usuario no encontrado.");
+                return "UserForm.html";
+            }
+        } catch (Exception e) {
+            model.put("error", "Error actualizando perfil: " + e.getMessage());
+            return "UserForm.html";
+        }
+    }
+
+
+    @GetMapping("/register")
+    public String register(ModelMap model) {
+        model.put("action", "/user/registed");
         return "UserForm.html";
     }
 

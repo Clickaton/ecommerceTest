@@ -22,6 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.math.BigDecimal;
+import com.ventas.eCommerce.Services.TransactionService;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+
+
 /**
  *
  * @author chris
@@ -29,6 +35,63 @@ import java.util.List;
 @Controller
 @RequestMapping("/cart")
 public class CartController {
+
+
+    @Autowired
+    private TransactionService transactionService;
+
+    @GetMapping("/checkout")
+    public String checkoutSelection(HttpSession session, ModelMap model) {
+        User logueado = (User) session.getAttribute("usuariosession");
+        if (logueado == null) {
+            return "redirect:/user/login";
+        }
+        Cart cart = logueado.getCart();
+        if (cart == null || cart.getProducts() == null || cart.getProducts().isEmpty()) {
+            model.put("error", "El carrito está vacío.");
+            return "cart.html";
+        }
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (Product p : cart.getProducts()) {
+            if(p.getPrice() != null) {
+                totalAmount = totalAmount.add(p.getPrice());
+            }
+        }
+        model.put("totalAmount", totalAmount);
+
+        return "checkout.html";
+    }
+
+    @PostMapping("/pay")
+    public String pay(HttpSession session, ModelMap model, @RequestParam String cardNumber, @RequestParam String address) {
+        try {
+            User logueado = (User) session.getAttribute("usuariosession");
+            if (logueado == null) {
+                return "redirect:/user/login";
+            }
+            Cart cart = logueado.getCart();
+            if (cart == null || cart.getProducts() == null || cart.getProducts().isEmpty()) {
+                model.put("error", "El carrito está vacío.");
+                return "cart.html";
+            }
+
+            BigDecimal totalAmount = BigDecimal.ZERO;
+            for (Product p : cart.getProducts()) {
+                if(p.getPrice() != null) {
+                    totalAmount = totalAmount.add(p.getPrice());
+                }
+            }
+
+            transactionService.register(LocalDateTime.now(), "00000000", cardNumber, LocalDate.now().plusYears(1), cart, address, logueado, totalAmount.doubleValue());
+            // Clear cart logic could go here
+            model.put("exito", "Compra realizada exitosamente.");
+            return "inicio.html";
+        } catch (Exception e) {
+            model.put("error", "Error procesando la compra: " + e.getMessage());
+            return "cart.html";
+        }
+    }
 
     @Autowired
     private CartService cartService;

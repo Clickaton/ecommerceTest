@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de usuario</title>
+    <title>Editar Perfil</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/styleCartas.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -23,24 +23,24 @@
 
     <div class="title">
         <img class="formLogo" src="/resources/images/logo user.png" alt="" width="72" height="72"> &nbsp;&nbsp;
-        <h3 class="display-6 fw-bold">Registro de usuario</h3>
+        <h3 class="display-6 fw-bold">Editar Perfil</h3>
     </div>
 
     <div class="content-form">
-        <form class="form" th:action="${action != null ? action : '/user/registed'}" method="post" enctype="multipart/form-data">
+        <form class="form" th:action="@{/user/profile/edit/__${session.usuariosession.id}__}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" name="name">
+                <input type="text" class="form-control" id="name" aria-describedby="emailHelp" name="name" th:value="${user.name}">
                 <div id="emailHelp" class="form-text">Ingrese su nombre </div>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp" name="lastName">
+                <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp" name="lastName" th:value="${user.lastName}">
                 <div id="emailHelp" class="form-text">Ingrese su apellido</div>
             </div>
             <div class="mb-3">
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    name="email" placeholder="EMAIL" th:value="email">
+                    name="email" placeholder="EMAIL" th:value="${user.email}" readonly>
             </div>
             <div id="emailHelp" class="form-text">Ingrese un correo electronico válido</div>
 
@@ -63,7 +63,7 @@
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Número de contacto</label>
                 <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    name="phone">
+                    name="phone" th:value="${user.phone}">
                 <div id="emailHelp" class="form-text">Ingrese su número telefónico de contacto</div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
